@@ -1,0 +1,12 @@
+ï»¿version 2.01
+platform ollo
+o main
+o begin
+o while(1)
+o begin
+- 
+o load param_dest:cm:38 param_src:cm:51
+o load param_dest:var:MaximumSpeed param_src:dec_num:1023
+o end
+o end
+Ã

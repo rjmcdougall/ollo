@@ -1,0 +1,58 @@
+ï»¿version 2.01
+platform bioloid
+o // param_text:Roboplus Sample 2 - Copyright Robosavvy 2009. by Pedro
+o // param_text:This program explores the programming of CONDITIONS, playing MOTIONS and querying the S1 sensor
+o // param_text:It will play motions depending on the buttons pressed on the CM5 as well as the readings of the S1 sensor
+o // param_text:Adjust the index of the Motions Played to your own needs/programming of your robot
+o main
+o begin
+o // param_text:We will make an infinite loop as we want the program to always run. 
+o // param_text:This is done with an instruction called ENDLESS LOOP
+o while(1)
+o begin
+o // param_text:You can find BUTTON when you add an IF and double click on the "?". Next select "Controller" and then "Button"
+o // param_text:You can find the U button, by double clicking on the "?" when you add the IF and then select "Constant Value" -> "Button" and then tick the buttons on the right hand side
+o if param_src:cm:32 lop:== param_src:button_num:8 rop:then
+o begin
+o // param_text:We will play a motion
+o // param_text:To play a motion you use the LOAD instruction as well. On left side of the LOAD instruction you select "MOTION" and then "MOTION NUMBER"
+o // param_text:from the menu and then on the right side you enter the motion number (or variable, etc)
+o load param_dest:motion:24 param_src:dec_num:1
+o end
+o elseif param_src:cm:32 lop:== param_src:button_num:1 rop:&& param_src:cm:31 lop:== param_src:bool_num:0 rop:then
+o begin
+o // param_text:The next two ELSE IF will explore the IFs and the use of AND and ORs. This is new in Roboplus
+o // param_text:and I think was not available in BCP. To make an && or ||, you double click the condition and then double click
+o // param_text:on the "then" word. Once you double click there you get a menu to select &&, ||
+o // param_text:What the next two ELSE IFs do is toggle the LED on and OFF as you press the R button
+- 
+o // param_text:Turn the led on if it is off. Again, we use the LOAD instruction to set LED=TRUE(ON)
+o load param_dest:cm:31 param_src:bool_num:1
+o end
+o elseif param_src:cm:32 lop:== param_src:button_num:1 rop:&& param_src:cm:31 lop:== param_src:bool_num:1 rop:then
+o begin
+o // param_text:Turn the led OFF if it is already on. Again, we use the LOAD instruction to set LED=FALSE (OFF)
+o load param_dest:cm:31 param_src:bool_num:0
+o end
+o elseif param_src:s1:100:27 lop:< param_src:dec_num:500 rop:then
+o begin
+o // param_text:Now we will play with the S1 sensor. We will play a motion if something gets too close
+o // param_text:PLEASE NOTE: I have not callibrated the threshold for trigering the action. Adjust the value to your needs
+o // param_text:If you want to explore how the S1 sensor reacts to readings, open RoboPlus Manager and select the S1 sensor
+o // param_text:There you will be able to see th readings change in real time as you get closer to the sensors
+- 
+o // param_text:We will play a motion
+o // param_text:To play a motion you use the LOAD instruction as well. On left side of the LOAD instruction you select "MOTION" and then "MOTION NUMBER"
+o // param_text:from the menu and then on the right side you enter the motion number (or variable, etc)
+o load param_dest:motion:24 param_src:dec_num:5
+o end
+o elseif param_src:s1:100:37 lop:> param_src:dec_num:2 rop:then
+o begin
+o // param_text:We will play a motion
+o // param_text:To play a motion you use the LOAD instruction as well. On left side of the LOAD instruction you select "MOTION" and then "MOTION NUMBER"
+o // param_text:from the menu and then on the right side you enter the motion number (or variable, etc)
+o load param_dest:motion:24 param_src:dec_num:10
+o end
+o end
+o end
+ò

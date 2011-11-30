@@ -1,0 +1,268 @@
+﻿version 2.01
+platform ollo
+o main
+o begin
+o load param_dest:var:MaximumSpeed param_src:dec_num:1023
+- 
+o if param_src:cm:57 lop:== param_src:dec_num:1 rop:then
+o begin
+o load param_dest:var:WaitingTime param_src:timer_num:6
+o jump laddr_dest:RemoconMode
+o end
+- 
+o if param_src:cm:57 lop:== param_src:dec_num:2 rop:then
+o begin
+o jump laddr_dest:SmartMode
+o end
+- 
+o jump laddr_dest:LineTracerMode
+- 
+o label laddr_src:RemoconMode
+o load param_dest:aux_servo:3:0 param_src:bool_num:1
+o load param_dest:aux_servo:4:0 param_src:bool_num:1
+- 
+o while(1)
+o begin
+o load param_dest:cm:33 param_src:var:WaitingTime
+- 
+o while param_src:cm:30 lop:== param_src:bool_num:0 rop:then
+o begin
+o if param_src:cm:33 lop:== param_src:dec_num:0 rop:then
+o begin
+o call faddr_dest:Stop
+o call faddr_dest:Joint1Stop
+o call faddr_dest:Joint2Stop
+o end
+o end
+- 
+o load param_dest:cm:60 param_src:powersave_num:2
+- 
+o load param_dest:var:ReceivedData param_src:cm:28
+- 
+o compute param_dest:var:MovingControlKey param_src:var:ReceivedData aop:& param_src:rc100z_num:15
+o if param_src:var:MovingControlKey lop:== param_src:rc100z_num:1 rop:then
+o call faddr_dest:Forward
+o elseif param_src:var:MovingControlKey lop:== param_src:rc100z_num:2 rop:then
+o call faddr_dest:Backward
+o elseif param_src:var:MovingControlKey lop:== param_src:rc100z_num:4 rop:then
+o call faddr_dest:LeftTurn
+o elseif param_src:var:MovingControlKey lop:== param_src:rc100z_num:8 rop:then
+o call faddr_dest:RightTurn
+o elseif param_src:var:MovingControlKey lop:== param_src:rc100z_num:5 rop:then
+o call faddr_dest:ForwardLeft
+o elseif param_src:var:MovingControlKey lop:== param_src:rc100z_num:9 rop:then
+o call faddr_dest:ForwardRight
+o elseif param_src:var:MovingControlKey lop:== param_src:rc100z_num:6 rop:then
+o call faddr_dest:BackwardLeft
+o elseif param_src:var:MovingControlKey lop:== param_src:rc100z_num:10 rop:then
+o call faddr_dest:BackwardRight
+o elseif param_src:var:MovingControlKey lop:== param_src:rc100z_num:0 rop:then
+o call faddr_dest:Stop
+- 
+- 
+o if param_src:var:ReceivedData lop:== param_src:rc100z_num:16 rop:then
+o begin
+o jump laddr_dest:SmartMode
+o end
+o end
+- 
+o label laddr_src:SmartMode
+o load param_dest:cm:55 param_src:buzzertime_num:255
+o load param_dest:cm:54 param_src:melody_num:3
+o call faddr_dest:WaitMelodyComplete
+o while(1)
+o begin
+- 
+o if param_src:cm:30 lop:== param_src:bool_num:1 rop:then
+o begin
+o if param_src:cm:28 lop:== param_src:rc100z_num:1 rop:then
+o begin
+o jump laddr_dest:RemoconMode
+o end
+o end
+- 
+- 
+o call faddr_dest:Forward
+- 
+o load param_dest:cm:55 param_src:buzzertime_num:255
+o load param_dest:cm:54 param_src:melody_num:6
+- 
+o if param_src:cm:51 lop:> param_src:dec_num:100 rop:|| param_src:cm:50 lop:< param_src:dec_num:50 rop:|| param_src:cm:52 lop:< param_src:dec_num:25 rop:then
+o begin
+o call faddr_dest:Stop
+- 
+o load param_dest:cm:55 param_src:buzzertime_num:255
+o load param_dest:cm:54 param_src:melody_num:3
+o call faddr_dest:WaitMelodyComplete
+- 
+o call faddr_dest:Backward
+o load param_dest:cm:33 param_src:timer_num:12
+o wait param_src:cm:33 lop:> param_src:timer_num:0 rop:then
+- 
+o call faddr_dest:BackwardLeft
+o load param_dest:cm:33 param_src:timer_num:12
+o wait param_src:cm:33 lop:> param_src:timer_num:0 rop:then
+- 
+o call faddr_dest:Stop
+- 
+o load param_dest:cm:55 param_src:buzzertime_num:255
+o load param_dest:cm:54 param_src:melody_num:3
+o call faddr_dest:WaitMelodyComplete
+- 
+o end
+- 
+o end
+- 
+- 
+- 
+- 
+o label laddr_src:LineTracerMode
+o load param_dest:cm:55 param_src:buzzertime_num:255
+o load param_dest:cm:54 param_src:melody_num:2
+o call faddr_dest:WaitMelodyComplete
+- 
+o while(1)
+o begin
+o if param_src:cm:50 lop:< param_src:dec_num:200 rop:&& param_src:cm:52 lop:> param_src:dec_num:200 rop:then
+o call faddr_dest:LeftTurn
+o elseif param_src:cm:50 lop:> param_src:dec_num:200 rop:&& param_src:cm:52 lop:< param_src:dec_num:200 rop:then
+o call faddr_dest:RightTurn
+o else
+o call faddr_dest:Forward
+- 
+o if param_src:cm:51 lop:> param_src:dec_num:200 rop:then
+o begin
+o call faddr_dest:Stop
+o load param_dest:cm:55 param_src:buzzertime_num:255
+o load param_dest:cm:54 param_src:melody_num:12
+o load param_dest:cm:33 param_src:timer_num:12
+o wait param_src:cm:33 lop:> param_src:timer_num:0 rop:then
+o load param_dest:cm:56 param_src:dec_num:0
+o wait param_src:cm:56 lop:== param_src:dec_num:0 rop:then
+o end
+o end
+o end
+- 
+o function faddr_src:WaitMelodyComplete
+o begin
+o wait param_src:cm:55 lop:> param_src:buzzertime_num:0 rop:then
+o end
+- 
+o function faddr_src:Forward
+o begin
+o call faddr_dest:Motor1FowardRotating
+o call faddr_dest:Motor2ReverseRotating
+o end
+- 
+o function faddr_src:Backward
+o begin
+o call faddr_dest:Motor1ReverseRotating
+o call faddr_dest:Motor2FowardRotating
+o end
+- 
+o function faddr_src:LeftTurn
+o begin
+o call faddr_dest:Motor1ReverseRotating
+o call faddr_dest:Motor2ReverseRotating
+o end
+- 
+o function faddr_src:RightTurn
+o begin
+o call faddr_dest:Motor1FowardRotating
+o call faddr_dest:Motor2FowardRotating
+o end
+- 
+o function faddr_src:BackwardLeft
+o begin
+o call faddr_dest:Motor1Stop
+o call faddr_dest:Motor2FowardRotating
+o end
+- 
+o function faddr_src:BackwardRight
+o begin
+o call faddr_dest:Motor1ReverseRotating
+o call faddr_dest:Motor2Stop
+o end
+- 
+o function faddr_src:ForwardLeft
+o begin
+o call faddr_dest:Motor1Stop
+o call faddr_dest:Motor2ReverseRotating
+o end
+- 
+o function faddr_src:ForwardRight
+o begin
+o call faddr_dest:Motor1FowardRotating
+o call faddr_dest:Motor2Stop
+o end
+- 
+o function faddr_src:Stop
+o begin
+o call faddr_dest:Motor1Stop
+o call faddr_dest:Motor2Stop
+o end
+- 
+o function faddr_src:Joint1CCWRotating
+o begin
+o load param_dest:aux_servo:3:2 param_src:dec_num:1023
+o load param_dest:aux_servo:3:1 param_src:dir_num:1023
+o end
+- 
+o function faddr_src:Joint1CWRotating
+o begin
+o load param_dest:aux_servo:3:2 param_src:dec_num:0
+o load param_dest:aux_servo:3:1 param_src:dir_num:1023
+o end
+- 
+o function faddr_src:Joint1Stop
+o begin
+o load param_dest:aux_servo:3:1 param_src:dir_num:0
+o end
+- 
+o function faddr_src:Joint2CCWRotating
+o begin
+o load param_dest:aux_servo:4:2 param_src:dec_num:1023
+o load param_dest:aux_servo:4:1 param_src:dir_num:1023
+o end
+- 
+o function faddr_src:Joint2CWRotating
+o begin
+o load param_dest:aux_servo:4:2 param_src:dec_num:0
+o load param_dest:aux_servo:4:1 param_src:dir_num:1023
+o end
+- 
+o function faddr_src:Joint2Stop
+o begin
+o load param_dest:aux_servo:4:1 param_src:dir_num:0
+o end
+- 
+o function faddr_src:Motor1FowardRotating
+o begin
+o load param_dest:aux_motor:1 param_src:var:MaximumSpeed
+o end
+- 
+o function faddr_src:Motor1ReverseRotating
+o begin
+o compute param_dest:aux_motor:1 param_src:dir_num:1024 aop:+ param_src:var:MaximumSpeed
+o end
+- 
+o function faddr_src:Motor1Stop
+o begin
+o load param_dest:aux_motor:1 param_src:dir_num:0
+o end
+- 
+o function faddr_src:Motor2FowardRotating
+o begin
+o load param_dest:aux_motor:2 param_src:var:MaximumSpeed
+o end
+- 
+o function faddr_src:Motor2ReverseRotating
+o begin
+o compute param_dest:aux_motor:2 param_src:dir_num:1024 aop:+ param_src:var:MaximumSpeed
+o end
+- 
+o function faddr_src:Motor2Stop
+o begin
+o load param_dest:aux_motor:2 param_src:dir_num:0
+o end
+&

@@ -1,0 +1,29 @@
+ï»¿version 2.01
+platform bioloid
+o // param_text:Roboplus Sample 1 - Copyright Robosavvy 2009. by Pedro
+o // param_text:This program will release torque on servo 1 so that you can move it freelly
+o // param_text:It will copy the position of servo 1 to servo 2, to make them move syncronously
+o // param_text:Use your hand to move servo 1 and servo 2 will follow
+o main
+o begin
+o // param_text:Disable torque on servo 1 so we can freelly move it.
+o load param_dest:motor:1:24 param_src:bool_num:0
+- 
+o // param_text:Loop. To stop the loop press the R button on the CM5
+o // param_text:If you double click on the != sign you can change the type of comparison to == or <=, etc
+o while param_src:cm:32 lop:!= param_src:button_num:1 rop:then
+o begin
+o // param_text:Read the Position of Servo 1 and save it in a variable named 'ServoPosition'
+o // param_text:To do this, we use the LOAD command.
+o load param_dest:var:ServoPosition param_src:motor:1:36
+- 
+o // param_text:Set the Position of Servo 2 to be the same as 'ServoPosition'
+o // param_text:Again we use the LOAD command. If you want to change the servo that moves, double click
+o // param_text:on the left side of the assignment and on the window that pops up change the ID of the servo
+o load param_dest:motor:2:30 param_src:var:ServoPosition
+- 
+o // param_text:NOTE that we do not need to use the intemediate variable 'ServoPosition'. We can simply do ID[2]Goal Position = ID[1] Goal POsition
+o // param_text:I wanted to use a variable just to demo the use of variables
+o end
+o end
+é·

@@ -1,0 +1,44 @@
+ï»¿version 2.01
+platform bioloid
+o // param_text:Roboplus Sample 3 - Copyright Robosavvy 2009. by Pedro
+o // param_text:This program explores querying the Robotis RC 100 Remote Controller
+o // param_text:This is typical program to make the Robot play motions according to the Remote Control keypresses
+o main
+o begin
+o // param_text:We will use an endless loop because we always wnat to have the robot respond
+o while(1)
+o begin
+o // param_text:We start by testing if a button was pressed
+o if param_src:cm:30 lop:== param_src:bool_num:1 rop:then
+o begin
+o // param_text:Now test the buttons that are pressed
+o if param_src:cm:28 lop:== param_src:rc100z_num:1 rop:then
+o begin
+o // param_text:Remember we use the LOAD instruction and select "MOTION PAGE" to play the desired motion number
+o load param_dest:motion:24 param_src:dec_num:1
+o end
+o elseif param_src:cm:28 lop:== param_src:rc100z_num:8 rop:then
+o begin
+o load param_dest:motion:24 param_src:dec_num:2
+o end
+o elseif param_src:cm:28 lop:== param_src:rc100z_num:257 rop:then
+o begin
+o // param_text:Now we will expore button combinations
+o load param_dest:motion:24 param_src:dec_num:4
+o end
+o elseif param_src:cm:28 lop:== param_src:rc100z_num:264 rop:then
+o begin
+o load param_dest:motion:24 param_src:dec_num:5
+o end
+o elseif param_src:cm:28 lop:== param_src:rc100z_num:0 rop:then
+o begin
+o // param_text:Finally explore an important feature: When all Keys are released it will send a REMOCON RXD=0
+o // param_text:This means REMOCON KEYUP. 
+o // param_text:We can choose to act on this event by, for example, interrupting the current motion playing
+o // param_text:To interrupt the current motion that is playing we set "MOTION PAGE"=0
+o load param_dest:motion:24 param_src:dec_num:0
+o end
+o end
+o end
+o end
+•G
